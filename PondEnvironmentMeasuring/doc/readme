@@ -1,0 +1,20 @@
+Pond Environment Measuring Application
+
+An Application for accessing the collected Measurements of the Pond Environment Measuring WSN.
+
+Features:
+  * Connecting to Collecting Nodes on specifiable IP Address and Port Number
+  * Showing read in CSV file's content
+  * Exporting loaded CSV contents to Hard Drive
+
+
+There are two Executable Java Programms in this Project:
+
+  - The Application: app.Main
+  - A Test Server: testserver.TestServer
+  
+The Test Server can be used to test the Application without a corresponding WSN. 
+The Server provides a small CSV File to be read in by the Application. The Server runs on port 6789.
+The Application is initially set to be connecting to 127.0.0.1:6789, so by default it tries to connect with 
+the running Test Server on the same Machine. To connect to an actual Collecting Node,
+its Address has to be specified.
