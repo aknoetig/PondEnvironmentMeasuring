@@ -34,13 +34,13 @@ public class Controller {
 	}
 	
 	// Connect to the Collecting Node for read out
-	public boolean connect(byte ip[], int port)
+	public boolean connect(String ip, int port)
 	{
 		String csv = null;
 		
 		try
 		{
-			InetAddress addr = InetAddress.getByAddress(ip);
+			InetAddress addr = InetAddress.getByName(ip);
 			if(!addr.isReachable(1500))
 			{
 				// selected Machine is unavailable

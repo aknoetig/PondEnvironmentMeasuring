@@ -178,21 +178,11 @@ public class GUI extends JFrame implements ActionListener{
 			// Connect Button has been clicked
 
 			int port = Integer.parseInt(portTextField.getText());
-			byte ip[] = new byte[4];
-			try
-			{
-				// Try Parsing the IP-Address Inputs to Binary Numbers
-				ip[0] = Byte.parseByte(ipTextField1.getText());
-				ip[1] = Byte.parseByte(ipTextField2.getText());
-				ip[2] = Byte.parseByte(ipTextField3.getText());
-				ip[3] = Byte.parseByte(ipTextField4.getText());
-			}
-			catch(NumberFormatException e)
-			{
-				// Parsing IP-Address failed 
-				JOptionPane.showMessageDialog(this, "Invalid IP Adress");
-				return;
-			}
+			String ip = ipTextField1.getText()+"."
+						+ipTextField2.getText()+"."
+						+ipTextField3.getText()+"."
+						+ipTextField4.getText();
+			
 			
 			// call Controller to connect
 			boolean result = controller.connect(ip, port);
