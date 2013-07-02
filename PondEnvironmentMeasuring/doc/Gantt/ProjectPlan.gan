@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Pond Environmental Measurement" company="" webLink="http://" view-date="2013-04-09" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="de_DE">
+<project name="Pond Environmental Measurement" company="" webLink="http://" view-date="2013-04-15" view-index="0" gantt-divider-location="446" resource-divider-location="300" version="2.0" locale="de">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Vorgang" width="57" order="0"/>
-        <field id="tpd4" name="Anfang" width="21" order="1"/>
-        <field id="tpd5" name="Ende" width="21" order="2"/>
+    <view zooming-state="default:6" id="gantt-chart">
+        <field id="tpd3" name="Vorgang" width="62" order="0"/>
+        <field id="tpd4" name="Anfang" width="14" order="1"/>
+        <field id="tpd5" name="Ende" width="22" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Ressource" width="70" order="0"/>
-        <field id="1" name="Rolle" width="29" order="1"/>
+        <field id="0" name="Ressource" width="50" order="0"/>
+        <field id="1" name="Rolle" width="49" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -36,13 +36,33 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="Inception Phase" color="#8cb6ce" meeting="false" start="2013-04-18" duration="8" complete="0" expand="true">
-            <task id="6" name="Team Formation" color="#8cb6ce" meeting="false" start="2013-04-18" duration="8" complete="0" expand="true"/>
-            <task id="8" name="Reasearch of Hardware Xbee and Arduino" color="#8cb6ce" meeting="false" start="2013-04-18" duration="8" complete="0" expand="true"/>
+        <task id="14" name="Configuration &amp; Change Management" color="#8cb6ce" meeting="false" start="2013-04-14" duration="9" complete="0" expand="true">
+            <task id="33" name="Select Plattform" color="#8cb6ce" meeting="false" start="2013-04-14" duration="2" complete="0" expand="true"/>
+            <task id="38" name="Prepare Plattform" color="#8cb6ce" meeting="false" start="2013-04-15" duration="8" complete="0" expand="true"/>
         </task>
-        <task id="1" name="Construction Phase" color="#8cb6ce" meeting="false" start="2013-06-08" duration="1" complete="0" expand="true"/>
-        <task id="2" name="Elaboration Phase" color="#8cb6ce" meeting="false" start="2013-06-08" duration="1" complete="0" expand="true"/>
-        <task id="3" name="Transition Phase" color="#8cb6ce" meeting="false" start="2013-06-08" duration="1" complete="0" expand="true"/>
+        <task id="32" name="Developement Environment" color="#8cb6ce" meeting="false" start="2013-04-14" duration="9" complete="0" expand="true">
+            <task id="35" name="Select Environment" color="#8cb6ce" meeting="false" start="2013-04-14" duration="2" complete="0" expand="true"/>
+            <task id="36" name="Prepare Environment" color="#8cb6ce" meeting="false" start="2013-04-15" duration="8" complete="0" expand="true"/>
+        </task>
+        <task id="9" name="Project Management" color="#8cb6ce" meeting="false" start="2013-04-14" duration="23" complete="0" expand="true">
+            <task id="15" name="Collect Informations about Hardware" color="#8cb6ce" meeting="false" start="2013-04-14" duration="14" complete="0" expand="true"/>
+            <task id="16" name="Collect Ideas and Choose Idea" color="#8cb6ce" meeting="false" start="2013-04-21" duration="14" complete="0" expand="true"/>
+            <task id="17" name="Define Idea" color="#8cb6ce" meeting="false" start="2013-04-28" duration="7" complete="0" expand="true"/>
+            <task id="18" name="Plan Iterations" color="#8cb6ce" meeting="false" start="2013-05-05" duration="2" complete="0" expand="true"/>
+        </task>
+        <task id="10" name="Requirements Analysis" color="#8cb6ce" meeting="false" start="2013-05-05" duration="7" complete="0" expand="true"/>
+        <task id="11" name="Analysis and Design" color="#8cb6ce" meeting="false" start="2013-05-12" duration="21" complete="0" expand="true">
+            <task id="26" name="Define Electronic Circuits" color="#8cb6ce" meeting="false" start="2013-05-12" duration="7" complete="0" expand="true"/>
+            <task id="25" name="Define System-Architecture" color="#8cb6ce" meeting="false" start="2013-05-19" duration="7" complete="0" expand="true"/>
+            <task id="40" name="Define Software-Architecture" color="#8cb6ce" meeting="false" start="2013-05-26" duration="7" complete="0" expand="true"/>
+        </task>
+        <task id="12" name="Implementation" color="#8cb6ce" meeting="false" start="2013-05-18" duration="44" complete="0" expand="true">
+            <task id="28" name="Implement Measuring Function" color="#8cb6ce" meeting="false" start="2013-05-18" duration="8" complete="0" expand="true"/>
+            <task id="30" name="Implement Response Function in Measuring Nodes" color="#8cb6ce" meeting="false" start="2013-06-08" duration="23" complete="0" expand="true"/>
+            <task id="31" name="Implement Receive Function in Collecting Node" color="#8cb6ce" meeting="false" start="2013-06-08" duration="23" complete="0" expand="true"/>
+            <task id="41" name="Implement Visualization Software" color="#8cb6ce" meeting="false" start="2013-06-17" duration="14" complete="0" expand="true"/>
+        </task>
+        <task id="13" name="Test and Bug Fixing" color="#8cb6ce" meeting="false" start="2013-05-18" duration="5" complete="0" expand="true"/>
     </tasks>
     <resources/>
     <allocations/>
@@ -57,9 +77,9 @@
         <displaycolumn property-id="tpd8" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd9" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd2" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="199" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="75" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="75" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="278" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="66" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="98" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
