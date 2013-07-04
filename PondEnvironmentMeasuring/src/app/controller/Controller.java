@@ -42,12 +42,24 @@ public class Controller {
 	}
 
 	// Connect to the Collecting Node for read out
+<<<<<<< HEAD
 	public boolean connect(byte ip[], int port) {
 		String csv = null;
 
 		try {
 			InetAddress addr = InetAddress.getByAddress(ip);
 			if (!addr.isReachable(1500)) {
+=======
+	public boolean connect(String ip, int port)
+	{
+		String csv = null;
+		
+		try
+		{
+			InetAddress addr = InetAddress.getByName(ip);
+			if(!addr.isReachable(1500))
+			{
+>>>>>>> 3d5632dd92fb059116e2b57322b5d462227c4a0d
 				// selected Machine is unavailable
 				return false;
 			}
