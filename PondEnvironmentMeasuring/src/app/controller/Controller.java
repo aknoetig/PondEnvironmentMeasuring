@@ -3,18 +3,12 @@ package app.controller;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.StringTokenizer;
-
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 // Controller class to provide functionality like File Export and Network connectivity
 // Follows Singleton Pattern
@@ -42,14 +36,6 @@ public class Controller {
 	}
 
 	// Connect to the Collecting Node for read out
-<<<<<<< HEAD
-	public boolean connect(byte ip[], int port) {
-		String csv = null;
-
-		try {
-			InetAddress addr = InetAddress.getByAddress(ip);
-			if (!addr.isReachable(1500)) {
-=======
 	public boolean connect(String ip, int port)
 	{
 		String csv = null;
@@ -59,7 +45,7 @@ public class Controller {
 			InetAddress addr = InetAddress.getByName(ip);
 			if(!addr.isReachable(1500))
 			{
->>>>>>> 3d5632dd92fb059116e2b57322b5d462227c4a0d
+
 				// selected Machine is unavailable
 				return false;
 			}
@@ -108,7 +94,7 @@ public class Controller {
 	}
 
 	public void parseCSV(){
-		String content = getCSVData(); 
+		//String content = getCSVData(); 
 		//Parse
 		//x = time;
 		//y = light;

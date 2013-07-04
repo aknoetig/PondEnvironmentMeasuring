@@ -1,22 +1,12 @@
 package app.view;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.Random;
-import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -33,17 +23,8 @@ import javax.swing.JTextField;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.TickUnitSource;
-import org.jfree.chart.labels.StandardXYItemLabelGenerator;
-import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.DefaultXYDataset;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -72,9 +53,6 @@ public class GUI extends JFrame implements ActionListener {
 	private JTextField portTextField;
 
 	private JTextArea textArea;
-
-	private static final int MAX = 8;
-	private static final Random random = new Random();
 
 	// Constructor
 	public GUI() {
@@ -262,18 +240,10 @@ public class GUI extends JFrame implements ActionListener {
 			// Connect Button has been clicked
 
 			int port = Integer.parseInt(portTextField.getText());
-			byte ip[] = new byte[4];
-			try {
-				// Try Parsing the IP-Address Inputs to Binary Numbers
-				ip[0] = Byte.parseByte(ipTextField1.getText());
-				ip[1] = Byte.parseByte(ipTextField2.getText());
-				ip[2] = Byte.parseByte(ipTextField3.getText());
-				ip[3] = Byte.parseByte(ipTextField4.getText());
-			} catch (NumberFormatException e) {
-				// Parsing IP-Address failed
-				JOptionPane.showMessageDialog(this, "Invalid IP Adress");
-				return;
-			}
+			String ip = ipTextField1.getText()+"."
+					  + ipTextField2.getText()+"."
+					  + ipTextField3.getText()+"."
+					  + ipTextField4.getText();
 
 			// call Controller to connect
 			boolean result = controller.connect(ip, port);
