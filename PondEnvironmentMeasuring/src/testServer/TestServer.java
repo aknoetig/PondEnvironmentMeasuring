@@ -10,9 +10,15 @@ class TestServer
    public static void main(String argv[]) throws Exception
       {
 	   
-	     String cvsContent = "00,30,15,13,05,2013,11.5,9.7,\n"
-	 			+ "01,00,16,13,05,2013,11.0,7.8,3.0\n"
-	 			+ "01,30,14,13,05,2013,,7.5, 3.5\n";
+	     String cvsContent = "00,00,02,02,07,2013,17.13,1\n" //2 o'clock
+	    		 		   + "00,00,05,02,07,2013,17.12,100\n" //5 o'clock
+	    		 		   + "00,00,08,02,07,2013,16.17,1000\n" //8 o'clock
+	    		 		   + "00,00,11,02,07,2013,17.22,700000\n" //11 o'clock
+	    		 		   + "00,00,14,02,07,2013,17.25,50000\n" //14 o'clock
+	    		 		   + "00,00,17,02,07,2013,18.26,20000\n" //17 o'clock
+	    		 		   + "00,00,20,02,07,2013,18.21,20000\n" //20 o'clock
+	    		 		   + "00,00,23,02,07,2013,18.17,1000\n" //23 o'clock
+	    		 			;
 
 	     // Socket on which the Server is running
 		 ServerSocket myServerSocket = new ServerSocket(6789);

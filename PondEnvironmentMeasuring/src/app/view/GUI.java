@@ -1,12 +1,22 @@
 package app.view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Random;
+import java.util.StringTokenizer;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -21,64 +31,145 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.TickUnitSource;
+import org.jfree.chart.labels.StandardXYItemLabelGenerator;
+import org.jfree.chart.labels.XYItemLabelGenerator;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import app.controller.ApplicationState;
 import app.controller.Controller;
 
 // Graphical User Interface
 //
-public class GUI extends JFrame implements ActionListener{
+public class GUI extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
 
 	private Controller controller = null;
-	
+
 	private JMenuBar menubar;
 	private JMenu menuFile;
 	private JMenuItem menuItemExport;
 
 	private JButton connectButton;
-	
+
 	private JTextField ipTextField1;
 	private JTextField ipTextField2;
 	private JTextField ipTextField3;
 	private JTextField ipTextField4;
-	
+
 	private JTextField portTextField;
 
 	private JTextArea textArea;
 
+	private static final int MAX = 8;
+	private static final Random random = new Random();
+
 	// Constructor
-	public GUI()
-	{
+	public GUI() {
 		super("Pond Environment Measuring Application");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setLayout(new FlowLayout());
-        
-        controller = Controller.getInstance();
-         
-        initialize();
+		this.getContentPane().setLayout(new FlowLayout());
+
+		controller = Controller.getInstance();
+
+		initialize();
 	}
-	
+
 	// Initialize the GUI, calling other initializeXXX() Methods
-	private void initialize()
-	{
+	private void initialize() {
 		initializeMenu();
 		initializeCSV();
 		initializeControlPanel();
-		
+		initialize_LightChart();
+		initialize_TempChart();
+
 		this.pack();
 		this.setVisible(true);
+	}
+
+	// Initialize the Chart
+	private void initialize_LightChart() {
+
+		// Create a simple XY chart
+		XYSeries series = new XYSeries("Light Graph");
+		series.add(1, 1);
+		series.add(1, 2);
+		series.add(2, 1);
+		series.add(3, 9);
+		series.add(4, 10);
+		// Add the series to your data set
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(series);
+		// Generate the graph
+		JFreeChart chart = ChartFactory.createXYLineChart("XY Chart", // Title
+				"Time in Hours", // x-axis Label
+				"Light in Lux", // y-axis Label
+				dataset, // Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true, // Show Legend
+				true, // Use tooltips
+				false // Configure chart to generate URLs?
+				);
+		
+		ChartPanel chartPanel = new ChartPanel(chart, false);
+		chartPanel.setPreferredSize(new Dimension(250, 250));
+		this.add(chartPanel, BorderLayout.CENTER);
+
+	}
+
+	// Initialize the Chart
+	private void initialize_TempChart() {
+
+		// Create a simple XY chart
+		XYSeries series = new XYSeries("Temperature Graph");
+		series.add(1, 1);
+		series.add(1, 2);
+		series.add(2, 1);
+		series.add(3, 9);
+		series.add(4, 10);
+		// Add the series to your data set
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(series);
+		// Generate the graph
+		JFreeChart chart = ChartFactory.createXYLineChart("XY Chart", // Title
+				"Time in Hours", // x-axis Label
+				"Temperature in Celsius", // y-axis Label
+				dataset, // Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true, // Show Legend
+				true, // Use tooltips
+				false // Configure chart to generate URLs?
+				);
+		
+		ChartPanel chartPanel = new ChartPanel(chart, false);
+		chartPanel.setPreferredSize(new Dimension(250, 250));
+		this.add(chartPanel, BorderLayout.CENTER);
+
 	}
 	
 	// initializes the Controlls
 	private void initializeControlPanel() {
-		
+
 		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new GridLayout(3,0));
-		
+		controlPanel.setLayout(new GridLayout(3, 0));
+
 		JPanel ipPanel = new JPanel();
 		ipPanel.setLayout(new FlowLayout());
 		JLabel ipLabel = new JLabel("IP:");
 		ipPanel.add(ipLabel);
-		
+
 		ipTextField1 = new JTextField("127", 3);
 		ipTextField1.addActionListener(this);
 		ipPanel.add(ipTextField1);
@@ -95,7 +186,7 @@ public class GUI extends JFrame implements ActionListener{
 		ipTextField4.addActionListener(this);
 		ipPanel.add(ipTextField4);
 		controlPanel.add(ipPanel);
-		
+
 		JPanel portPanel = new JPanel();
 		portPanel.setLayout(new FlowLayout());
 		JLabel portLabel = new JLabel("Port:");
@@ -104,108 +195,97 @@ public class GUI extends JFrame implements ActionListener{
 		portTextField.addActionListener(this);
 		portPanel.add(portTextField);
 		controlPanel.add(portPanel);
-		
+
 		connectButton = new JButton("Connect");
 		connectButton.addActionListener(this);
 		controlPanel.add(connectButton);
-		
+
 		this.add(controlPanel);
-		
+
 	}
 
 	// Initializes the CSV View
 	private void initializeCSV() {
-		
-		
+
 		textArea = new JTextArea();
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
-		
+
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(new Dimension(400, 300));
-		
+
 		JPanel csvPanel = new JPanel(new BorderLayout());
-		
+
 		csvPanel.add(scrollPane);
-        this.getContentPane().add(csvPanel);
+		this.getContentPane().add(csvPanel);
 	}
 
 	// initializes the Menu
-	private void initializeMenu()
-	{
+	private void initializeMenu() {
 		menubar = new JMenuBar();
 		menuFile = new JMenu("File");
 		menuItemExport = new JMenuItem("Export as CSV");
-		
+
 		menuFile.add(menuItemExport);
 		menubar.add(menuFile);
-		
+
 		menuItemExport.addActionListener(this);
-		
-		this.setJMenuBar(menubar);		
+
+		this.setJMenuBar(menubar);
 	}
-	
+
 	// Action Handler, called on GUI-Input Actions
-	public void actionPerformed(ActionEvent evt)
-	{
+	public void actionPerformed(ActionEvent evt) {
 		Object source = evt.getSource();
-		
-		if(source.equals(menuItemExport))
-		{
+
+		if (source.equals(menuItemExport)) {
 			// Menu Item "Export as CSV has been selected"
-			if(controller.getState() == ApplicationState.INITIALIZED_WITH_DATA)
-			{
+			if (controller.getState() == ApplicationState.INITIALIZED_WITH_DATA) {
 				// Exportable Data is available
 				System.out.println("Save as CVS");
 				JFileChooser fc = new JFileChooser();
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				
+
 				if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-					  File file = fc.getSelectedFile();
-					  // save to file
-					  controller.exportCSV(file);
+					File file = fc.getSelectedFile();
+					// save to file
+					controller.exportCSV(file);
 				}
-			}
-			else
-			{
+			} else {
 				// No exportable Data is available
-				JOptionPane.showMessageDialog(this, "No exportable Data.","", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "No exportable Data.", "",
+						JOptionPane.ERROR_MESSAGE);
 			}
-			
+
 		}
-		if(source.equals(connectButton))
-		{
+		if (source.equals(connectButton)) {
 			// Connect Button has been clicked
 
 			int port = Integer.parseInt(portTextField.getText());
 			byte ip[] = new byte[4];
-			try
-			{
+			try {
 				// Try Parsing the IP-Address Inputs to Binary Numbers
 				ip[0] = Byte.parseByte(ipTextField1.getText());
 				ip[1] = Byte.parseByte(ipTextField2.getText());
 				ip[2] = Byte.parseByte(ipTextField3.getText());
 				ip[3] = Byte.parseByte(ipTextField4.getText());
-			}
-			catch(NumberFormatException e)
-			{
-				// Parsing IP-Address failed 
+			} catch (NumberFormatException e) {
+				// Parsing IP-Address failed
 				JOptionPane.showMessageDialog(this, "Invalid IP Adress");
 				return;
 			}
-			
+
 			// call Controller to connect
 			boolean result = controller.connect(ip, port);
-			if(result)
-			{
+			if (result) {
 				// Data has been read in, updating CSV View
-				JOptionPane.showMessageDialog(this, "Data has been read", "", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Data has been read", "",
+						JOptionPane.INFORMATION_MESSAGE);
 				textArea.setText(controller.getCSVData());
-			}
-			else
-			{
+			} else {
 				// Connection Failed for some reason
-				JOptionPane.showMessageDialog(this, "Connection Failed","", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Connection Failed", "",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

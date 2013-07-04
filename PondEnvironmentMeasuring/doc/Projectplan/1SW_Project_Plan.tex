@@ -227,6 +227,24 @@ Some relevant facts taken from the Datasheet:
 This gives us the Formular: Temp [\degree C] = \textbf{$\frac{Voltage [mv] -500}{10}$}
 \\\\
 The LDR (Light Dependant Resistor) is for Measuring the light Level. LDR's are usually not precise enough to really measure the light level, but are rather used to distinguish darknes from lightness. So we wont get very precise readings with it, but iwe will try to get the best out of it.
+\\\\
+Some relevant specifications:
+\begin{itemize}
+\item not precise enough to measure the light level in Lux
+\item only measure darkness from light
+\item Reliable performance
+\item linear relation
+\end{itemize}
+To get the light value in Lux you have to execute following:
+\begin{itemize}
+\item Get voltage of Resistor
+\item Get Resistor Value with formula: $\frac{5.0-LightVoltage}{LightVoltage}*1000$
+\item Get Luxy with formula: 
+	\begin{equation*}
+		10*\frac{14000}{Light Resistor}^\frac{1}{0.7}
+	\end{equation*}
+\end{itemize}
+If you calculate the Error of Light and Temperature you will see, that Temperature has a quantisation error of $\pm$1\degree C and the light has a very big quantisation error. Ths let us see, that you cannot measure really exact.
 
 \subsubsection{Measuring Nodes}
 The Measuring Nodes consist of Arduino Uno's (or similar boards like Leonardo) which the Software is running on ant the Sensors are connected to. The Arduino Board is expanded using a Wireless Proto Shield with an XBee Module to provide ZigBee Network conectivity.
@@ -342,6 +360,7 @@ In this Format, for every complete measurement, a line size of approximately 34 
 With just a 32MB sized SD Card this System could collect Data for about 55 years. Since we will hardly be able to find an SD-Card of a size lower than 1GB it is obvious that Filesize is not going to be a problem.
 
 \subsubsection{Measuring Nodes}
+The Measuring Nodes have implemented several functions. One function calculate the 
 
 \subsubsection{Application}
 The features of the Application are described in the list of requirements. To imagine how the application behaves and how to modularize it we begin by creating a mock-up of the GUI:
