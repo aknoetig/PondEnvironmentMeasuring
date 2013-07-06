@@ -63,6 +63,7 @@ public class GUI extends JFrame implements ActionListener {
 		controller = Controller.getInstance();
 
 		initialize();
+		
 	}
 
 	// Initialize the GUI, calling other initializeXXX() Methods
@@ -72,6 +73,8 @@ public class GUI extends JFrame implements ActionListener {
 		initializeControlPanel();
 		initialize_LightChart();
 		initialize_TempChart();
+		
+		
 
 		this.pack();
 		this.setVisible(true);
@@ -82,6 +85,7 @@ public class GUI extends JFrame implements ActionListener {
 
 		// Create a simple XY chart
 		XYSeries series = new XYSeries("Light Graph");
+		String[] data = controller.parseCSV();
 		series.add(1, 1);
 		series.add(1, 2);
 		series.add(2, 1);
@@ -247,11 +251,13 @@ public class GUI extends JFrame implements ActionListener {
 
 			// call Controller to connect
 			boolean result = controller.connect(ip, port);
+			controller.parseCSV();
 			if (result) {
 				// Data has been read in, updating CSV View
 				JOptionPane.showMessageDialog(this, "Data has been read", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				textArea.setText(controller.getCSVData());
+				controller.parseCSV();
 			} else {
 				// Connection Failed for some reason
 				JOptionPane.showMessageDialog(this, "Connection Failed", "",

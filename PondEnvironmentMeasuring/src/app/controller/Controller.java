@@ -93,11 +93,20 @@ public class Controller {
 		}
 	}
 
-	public void parseCSV(){
+	public String[] parseCSV(){
 		//String content = getCSVData(); 
 		//Parse
 		//x = time;
 		//y = light;
+		
+		String str = getCSVData();
+		String[] results = str.split(",");
+		
+		for(int i=0; i<=results.length; i++){
+			System.out.print(results[i]);
+		}
+		
+		return results;
 	}
 	
 	public double getX() {

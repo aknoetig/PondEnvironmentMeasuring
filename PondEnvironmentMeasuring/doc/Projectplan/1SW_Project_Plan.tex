@@ -23,6 +23,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{wrapfig}								% wrapping pictures
 \usepackage{todonotes}
+\usepackage{pdfpages}
 \usepackage{colortbl}
 \usepackage{color}
 % Define user colors using the RGB model
@@ -141,6 +142,78 @@ The 6 Best Practices are as follows :
 \item Control changes to software
 \end{enumerate}
 
+In every Iteration, all of these tasks can be performed with a certain weight. In the first iterations a lot of weight will be on the Requirements and less on the Deployment. In later iterations Deployment is going to gain weight while the Requirements are almost done. So it is possible to react to change, and to correct errors, with the beginnig of every iteration and it will be accomplished at the end of the iteration. It is also intended that the software gains functionality with each iteration (incremental development).
+
+All iterations of a project are grouped into 4 phases.
+\begin{enumerate}
+\item Inception
+\item Elaboration phase
+\item Construction phase
+\item Transition phase
+\end{enumerate}
+\begin{itemize}
+\item Each phase is concluded with a well-defined milestone
+\item Each phase has a specific purpose
+\end{itemize}
+\textbf{Inception phase:}
+\begin{itemize}
+\item A vision document
+\item An intial use-case model
+\item An Initial project glossary
+\item An initial business case
+\item A project plan, showing phases and iterations .
+\item A business model
+\end{itemize}
+Project milestone : The Lifecycle Objectives Milestone
+\\\\
+\textbf{Construction Phase:}\\\\
+The construction Phase is concerned with moving from the executable architechtures created in the Elaboration phase to an operational system
+\begin{itemize}
+\item the focus here is to develop the application to the point where it is ready for deployment
+\item Focus is on implementation of the design
+\end{itemize}
+Project Milestone : Initial operational Capability 
+\\\\
+\textbf{Elaboration Phase:}
+\begin{itemize}
+\item A use-case model (at least 80\% complete) supplementary requirement (non functional requirement)
+\item A software architechtural description
+\item An Executable architechtural prototype 
+\item A revised risk list and a revised business case 
+\item A development plan for the overall project 
+\item An updated development case specifying the process to be used 
+\item A preliminary user manual (optional)
+\item Domain model
+\end{itemize}
+Project milestone : the Lifecycle architechture Milestone
+\\\\
+\textbf{Transition Phase:}
+\begin{itemize}
+\item "Beta testing" to validate the new system against user expectations 
+\item Parallel operation with a legacy system that it is replacing 
+\item Conversion of operational database
+\item Training of users and maintainers 
+\item roll-out the product to the marketing , distribution , and sales team 
+\end{itemize}
+Project milestone : The product Release Milestone
+\\\\
+\textbf{Pros of RUP:}
+\begin{itemize}
+\item Regular feedback from and stakeholders
+\item efficient use of resources
+\item we can deliver exactly what the customer wants
+\item Issues are discovered early in your project
+\item Supports iterative development
+\item Improved risk management
+\end{itemize}\textbf{Cons Of RUP:}
+\begin{itemize}
+\item The process may be too complex to implement .
+\item Development can get out of control
+\item It is a heavyweight process
+\item You need an expert to fully adopt this process
+\end{itemize}
+
+
 \subsection{Requirements}
 \subsubsection{General Requirements}
 There are Three (Software) components to be developed:
@@ -250,7 +323,11 @@ If you calculate the Error of Light and Temperature you will see, that Temperatu
 The Measuring Nodes consist of Arduino Uno's (or similar boards like Leonardo) which the Software is running on ant the Sensors are connected to. The Arduino Board is expanded using a Wireless Proto Shield with an XBee Module to provide ZigBee Network conectivity.
 \\\\
 The Sensors are being used according to the following Circuit Diagram.
-BILD
+\begin{figure}[h!]
+  \caption{Sensor Circuit}
+  \centering
+    \includegraphics[width=0.75\textwidth]{../Images/Circuit.png}
+\end{figure}
 The \textbf{TMP36} is directly connected to the Arduino's 5V Power source and GND, the output voltage of the \textbf{TMP36} is read on the A0 Analog Input of the Arduino.
 \\\\
 On the weather measuring Node the circuit is enlarged by the \textbf{GL5528 LDR}. The LDR is used in a voltage divider circuit. The Voltage of 5 Volt is being divided by the propordion of the resistances of the LDR and the fixed Resistor. This “proportional divided” voltage is supplied to the A1 Analog Input of the Arduino.
@@ -281,7 +358,7 @@ The XBee Modules are connected to the Arduino over a Serial Connection. The prot
 Every XBee Module comes with a 64 Bit long Serial number that is also used as its own ZigBee Network Adress. The coordinator must know the adresses of the two measuring Nodes. It is possible for the Collector to discover the other Nodes using broadcasts, however we are going to hardcode the Meaurement Nodes adresses into the collectors Sourcecode. The Measuring Nodes are going to adress the collector either by taking its adress from the collectors packets, or by using the reserved Adress 0x0000000000000000 (coordinators 64 Bit adress).
 \\\\
 There is also a 16 Bit PAN (Personal Area Network) Adress that has to be set up on all Nodes. The exact adress is irellevant (as long as its 16 Bit long and the same on every Node). The Adress we are using will be dec 56154 = 0xDB5A. By the way, this adress was chosen by multiplying 42 by 1337.
-\\\\
+\newpage
 \textbf{ZigBee Network Messages}
 \\\\
 Between the Measuring Nodes and the Collector there are two Messages that have to be defined. The first there is the Measurements Request that the Collector sends to the Measuring Nodes. The second Message is the answer from the Measuring Nodes to the collector.
@@ -328,6 +405,7 @@ The first Byte indicates that this is a measurement response from the Pond Measu
 \textbf{Communication between the Collector and the Application}\\\\
 The Collector is hosting a TCP Server (static ip Adress and portnumber, hardcoded into sourcecode). The Application is going to connect to the collector as a client. After the TCP 3-Way handshake id over the collector is immediately going to transfer its CSV-File over the TCP conection to the Application. After the complete File is transfered the connection is being closed.
 
+\newpage
 \subsubsection{Collecting Node}
 \textbf{CSV File Format:}
 \\\\
@@ -358,16 +436,61 @@ In this Format, for every complete measurement, a line size of approximately 34 
 \item 1 Year of measurements = 12 * 50.592 Bytes = 607.104 Bytes $\approx$ 593 kByte
 \end{itemize}
 With just a 32MB sized SD Card this System could collect Data for about 55 years. Since we will hardly be able to find an SD-Card of a size lower than 1GB it is obvious that Filesize is not going to be a problem.
+\newpage
+\textbf{Software Components:}
+\\\\
+Since the Collecting Node has several responsibilities in respect to functionality, it's Software consists of several Components:
+\begin{figure}[h!]
+  \caption{Collecting Node}
+  \centering
+    \includegraphics[width=0.75\textwidth]{../Images/collector_software_components.png}
+\end{figure}
+Those components get realised in the Software by writing so called Arduino Libraries. The Arduino Plattform provides several Libraries for different Services, but it also allows users to write their own Libraries. User defined Libraries get implemented by defining C++ classes that get instanciated in the Arduino sketch. This means that Arduino Libraries are just a way of using object oriented software development to modularize Arduino Sketches.
+\\\\
+The ZigBee Wireless Networking component takes care of everything the Collector has to do on the ZigBee Network, meaning to Send Measurement Requests and to receive the Measurement Responses from the Measuring Nodes. The Ethernet Networking component provides everything that has to be done using the Ethernet/IP Network connection. There are two functionalities provided by this component. First is the possibility to get the current Daytime and Date from a NTP Server. The second functionality is the hosting of a TCP Server, waiting for incomming connections. As a connection gets established the component sends the Data, which is stored using the SD-Data storage component, to the connected TCP-client (Our WSN-Accessing Application).
+\\\\
+The Component for intrnaly keeping the current Time and Date is not coded by us. It is the openly available Time Library by Michael Margolis. It uses the Arduino's internal function millis(), so no additional Hardware is needed to keep the time. The Time can be set by retrieving the UNIX standard Time (seconds since the 1st of January, 1970 00:00:00) and providing it to the Time library. It is then possible to retrieve the current Time in Hours, minutes and Seconds, as well as the calender date.
+\\\\
+The last component is the SD-Data storage component. It provides access to the SD-Card that can be inserted into a socket on the Arduino Ethernet board. On the SD-Card, there is one File created called “data.csv”. The SD-component adds CSV-Lines to the File, and can retrieve the File byte-wise.
+\\\\
+\textbf{Application Flow}\\\\
+Arduino Sketches are always based on two core functions, setup() and loop(). Setup() contains all code that should run when the Arduino Board powers on, and loop() contains all the code that will run repeatedly until the Board gets powered off.
+\\\\
+Besides a lot of general initilization, inside setup() the collector does two things:
+\begin{itemize}
+\item Synchronize the Time using NTP
+\item Create data.csv on the SD-Card if not present
+\end{itemize}
+For the operation of the Collector it is absolutely necessary to know the current Time and Date, thats why the collector first synchronizes using NTP. Then the data storage File gets created. If the file is already present, it will just be opened. The File does never get deleted by the collector!
+\newpage
+In the loop() function the collector works according to the following Algorithm:
+\begin{figure}[h!]
+  \caption{Collecting Node Flow Chart}
+  \centering
+    \includegraphics[width=0.45\textwidth]{../Images/collector_flow_chart.png}
+\end{figure}
 
 \subsubsection{Measuring Nodes}
-The Measuring Nodes have implemented several functions. One function calculate the 
+The Measuring Nodes are seperated into two Parts. One Measuring Node measures Light and Temperature as an Weather Station outside. The other Measuring Node collect the temperature of a pond. The measured data is send via a tx package in the ZigBee Network to the Collector Node. Inside the Measuring Nodes there are executing following Functions:
+\begin{itemize}
+\item read Voltage from Analog Pin
+\item Calculate Temperature 
+\item Calculate Light
+\item Send Temperature and Light Values via payload in a TX packet to Collector
+\end{itemize}
+\begin{figure}[h!]
+  \caption{Measuring Nodes: Flow Chart}
+  \centering
+    \includegraphics[width=0.20\textwidth]{../Images/Seq_Measuring.png}
+\end{figure}
+The Flow Chart shows, that the Measuring Nodes has a linear sequence of functions. These functions were repeated again and send temperature data and light data via a tx packet to the Collector Node.
 
 \subsubsection{Application}
 The features of the Application are described in the list of requirements. To imagine how the application behaves and how to modularize it we begin by creating a mock-up of the GUI:
 \begin{figure}[h!]
   \caption{Mock-Up: Application}
   \centering
-    \includegraphics[width=0.5\textwidth]{../Images/Application.png}
+    \includegraphics[width=0.75\textwidth]{../Images/Application.png}
 \end{figure}
 This is the graphical user Interface. On the left side is a \textbf{plotting area} where the history of measured Data is shown as a plot. On the right side are some necessary controlls.
 \\\\
@@ -381,11 +504,11 @@ The Software Architecture follows the MVC Pattern and has the components shown i
 \begin{figure}[h!]
   \caption{Application-Architecture}
   \centering
-    \includegraphics[width=0.25\textwidth]{../Images/application_architecture.png}
+    \includegraphics[width=0.50\textwidth]{../Images/application_architecture.png}
 \end{figure}
 
 
-% -------------------------- Project Estimation -----------------------------------------
+% -------------------------- Project Estimation --------------------------------------
 \newpage
 \section{Project Estimates}
 \subsection{Estimation technique Function Point}
@@ -494,7 +617,7 @@ The Programmers in a company average 18 FP per month.\\
 
 % ------------------------------- Project Schedule ---------------------------------
 \section{Project Schedule}
-
+Look at ../Gantt/ProjectPlan.pdf
 
 % -------------------------------- Staff Organization ----------------------------
 \section{Staff Organization}
@@ -505,15 +628,58 @@ The team is organized without any hierarchically behaviors, all team members are
 	\item Sabrina B. - sabrina.bajorat@gmail.com
 	\item Rozana A. - rozanamail1@yahoo.com
 	\item Alexander V.D. - vallejodirektor@googlemail.com
+\end{itemize}The Team Members had following Tasks:
+\begin{itemize}
+	\item Alexander K. - Documentation, Wiki Administrator, Implementation of Collecting Node and Application (GUI, TestServer)
+	
+	\item Sabrina B. - Documentation, Project Plan, Gantt Chart, Implementation of Measuring Nodes and Application (GUI, TestServer)
+
+	\item Rozana A. - Domain Expert (Arduino, Xbee)
+
+	\item Alexander V.D. - Estimation of Project
 \end{itemize}
 
 \subsection{Management reporting and communication}
 There are every week status reports of done and open tasks for the current and next week. The main organization and communctions follows over the Wiki (\url{http://vs1164102.vserver.de/dokuwiki/doku.php?id=ssns:ssns-project}).
 
+
+% -------------------------------- Project Results ------------------------------
+\section{Project Results}
+According to our Architecture Designs we started to implement our assigned software products. Since the technology of Arduino and XBee was new to us, implementation followed the principles of trial and error, with a lot of experimental coding. It was difficult for us to estimate the complexity of the task to implement the software according to the planned architecture. At some points we had to do some cutbacks to the requirements to finish the product in time. Unfortunatelly we were unable to get the Wireless Sensor Network to work. The main reason for that is that we were unable to get the collecting Nodes Software to work.
+\\
+In the following sections we describe what we have archieved in respect to the software components.
+
+
+\subsection{Software for the Collecting Node}
+
+The Collecting Node was the most complex Software component, and unfortunatelly it was not finished in time. Alexander Knötig was the developer responsible for that component.
+\\\\
+As planned in the Architecture design, the collecting Nodes Software consists of several components implementing subtasks of the collecting Node. Only the components for handling the SD-Card access and the handling of Time and Date have been working as supposed. The components responsible for ZigBee Network connectivity and Ethernet connectivity could not be made working. The problem with implementing those components (and all the other components as well) is related to the Arduino Development Environment.
+\\\\
+It is made to be simple and easy to learn for programming beginners. But those simplififications also enforce limitations on the programmer. For example, there is no real control over which object files get linked together in order to resolve dependencies. This is especially problematic when writing libraries (like the components of the collecting Node) that use other libraries. The header files of used Libraries always get included, so the necessary files can get compiled, but when trying to link them together, the necessary object files from the libryries don't get linked. There are workarounds to this problem, but they tend to make the code hard to work with.
+\\\\
+Another limitation of the Arduino Development environment is the missing possibility to debug the code. Professional Development Environments for microcontrollers (Like Atmels ATmega) provide possibilities to debug the software while it is running on the microcontroller. This is offcourse more complex that debugging Software for usual PC Operating Systems, but it is a possibility to understand what is going wrong. When using Arduino, it is not possible to see what is running wrong. You can upload your programm to the board and then observe the results, either the board does what it is supposed to be doing, or it doesn't. There are no Exception Messages (like in Java programms), no hex Dumps, and not even a sign if the microcontroller has shut down because of a severe error. If the Arduino Board encounters an error while executing the programm code it just stops the programms execution. There is no possibility to see where it crashed and why.
+\\\\
+When trying to implement the Collecting Node we often encountert the sutiation that the software just did not work, but we were unable to find out why. Thats why we were unable to finish it in time.
+
+
+\subsection{Software for the Measurement Nodes}
+
+The Softwar for the Measurement Nodes was relatively simple, relative to the collecting nodes Software. But since the collecting Node was not working, it was also not possible to operate the measurement Nodes with it together. The Mesuring Nodes are supposed to be waiting for a Measurement Request Message from the Collecting Node, when receiving this request, the Measuring Nodes send an Response Message.
+\\\\
+Because of the missing Collecting Node, we were unable to implement the concept of waiting for an request and answering with an response. Instead, we implemented the measuring Nodes to periodically send a response Message, without listening for Requests.
+
+
+\subsection{WSN Accessing Application}
+
+The WSN Accessing Application was supposed to feature a Table and a Graph to visualize the Data that was going to be read in from the Collecting Node. But over the course of the project we changed the applications features a little bit. But the core function of reading the csv file from the Collecting Node and saving it to the computers hard drive is left unchainged. The implemented Application features a textarea displaying the loaded csv file as it is, and also two graphs, one for plotting the curve of the lightlevel and one for plotting two curves for the temperature measurements.
+
 % -------------------------------- Protocol -------------------------------------
 \newpage
 \section{Protocol}
-%%% Week 16 ---------------------------------------------------------------------
+\begin{tabular}{ll}
+ \parbox{8cm}{
+ %%% Week 16 ---------------------------------------------------------------------
 \large{\textbf{Week 16}}
 \begin{itemize}
 \item Team Formation
@@ -547,6 +713,9 @@ There are every week status reports of done and open tasks for the current and n
 \item Project Plan Version 1
 \item Create Circuits
 \end{itemize}
+}
+ &
+ \parbox{8cm}{
 %%% Week 21 ---------------------------------------------------------------------
 \large{\textbf{Week 21}}
 \begin{itemize}
@@ -560,17 +729,37 @@ There are every week status reports of done and open tasks for the current and n
 \item Implementation of Collecting and Measuring Nodes
 \item Continue with Project Plan 
 \end{itemize}
-%%% Week 23 ---------------------------------------------------------------------
-\large{\textbf{Week 23}}
+%%% Week 23-25 ---------------------------------------------------------------------
+\large{\textbf{Week 23-25}}
 \begin{itemize}
 \item Implementation of ZigBee Network
+\item Implementation of Application TestServer + Graphical View of measured data
 \item Continue with Project Plan 
 \end{itemize}
-
+%%% Week 26-27
+\large{\textbf{Week 26-27}}
+\begin{itemize}
+\item Test Software
+\item Finish Project Plan
+\item Prepare Presentation
+\end{itemize}
+ }
+\end{tabular}
 
 % ---------------------------------------------------------------------------------------
-\section{Appendix}
+\newpage
 \begin{thebibliography}{9}
+\bibitem{}Arduino Library {\url{http://arduino.cc/en/Reference/Libraries}}
+\bibitem{}Arduino XBee Library {\url{https://code.google.com/p/xbee-arduino/}}
+\bibitem{}XBee {\url{http://www.digi.com/xbee/}}
+\bibitem{}XBee {\url{http://xbee.wikispaces.com/}}
+\bibitem{}TMP36 {\url{http://www.analog.com/static/imported-files/data_sheets/TMP35_36_37.pdf}}
+\bibitem{}GL5528 {\url{https://www.sparkfun.com/datasheets/Sensors/Imaging/SEN-09088-datasheet.pdf}}
+\bibitem{}{\url{http://www.pjrc.com/teensy/td_libs_Time.html}}
+\bibitem{Faludi}Building Wireless Sensor Networks: With ZigBee, XBee, Arduino, and Processing", Robert Faludi, O'Reilly Media; Auflage: 1 (31. Januar 2011)
+\bibitem{Conell}Mc Connell, Rapid Development, Microsoft Press, 1996
+\bibitem{Jones}C. Jones, Applied Software Measurement, 1991, McGraw Hill
+\bibitem{Garmus}D. Garmus and D. Herron, Measuring the Software Process, Prentice Hall, 1996
+\bibitem{Balzert}Helmut Balzert, Lehrbuch der Software-Technik, Spektrum Akademischer Verlag 2001
 \end{thebibliography}
-
 \end{document}
