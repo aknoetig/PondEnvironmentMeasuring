@@ -81,8 +81,6 @@ public class GUI extends JFrame implements ActionListener {
 		initializeControlPanel();
 		initialize_LightChart();
 		initialize_TempChart();
-		
-		
 
 		this.pack();
 		this.setVisible(true);
