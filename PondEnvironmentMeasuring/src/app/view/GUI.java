@@ -85,7 +85,7 @@ public class GUI extends JFrame implements ActionListener {
 
 		// Create a simple XY chart
 		XYSeries series = new XYSeries("Light Graph");
-		String[] data = controller.parseCSV();
+		//String[] data = controller.parseCSV();
 		series.add(1, 1);
 		series.add(1, 2);
 		series.add(2, 1);
