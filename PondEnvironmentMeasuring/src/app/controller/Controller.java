@@ -42,10 +42,11 @@ public class Controller {
 		
 		try
 		{
+			System.out.println("try to reach server");
 			InetAddress addr = InetAddress.getByName(ip);
 			if(!addr.isReachable(1500))
 			{
-
+				System.out.println("Server is not reachable");
 				// selected Machine is unavailable
 				return false;
 			}
@@ -56,12 +57,13 @@ public class Controller {
 					new InputStreamReader(clientSocket.getInputStream()));
 
 			csv = "";
-			while (inFromServer.ready()) // while Lines are available
+			String read = "";
+			while ((read = inFromServer.readLine()) != null) // while Lines are available
 			{
 				// read line and store in csv
-				csv = csv + inFromServer.readLine() + "\n";
+				//csv = csv + inFromServer.readLine() + "\n";
+				csv += read + "\n";
 			}
-
 			// close Connection
 			clientSocket.close();
 		} catch (IOException e) {
@@ -93,31 +95,20 @@ public class Controller {
 		}
 	}
 
-	public String[] parseCSV(){
-		//String content = getCSVData(); 
-		//Parse
-		//x = time;
-		//y = light;
+	public Data[] parseCSV(){
 		
 		String str = getCSVData();
-		String[] results = str.split(",");
+		String[] lines = str.split("\n");
 		
-		for(int i=0; i<=results.length; i++){
-			System.out.print(results[i]);
+		Data[] result = new Data[lines.length];
+		
+		for(int i=0; i< lines.length; i++){
+			result[i] = new Data(lines[i]);
 		}
 		
-		return results;
+		return result;
 	}
 	
-	public double getX() {
-
-		return x;
-	}
-
-	public double getY() {
-
-		return y;
-	}
 
 	// Get applications State
 	public ApplicationState getState() {

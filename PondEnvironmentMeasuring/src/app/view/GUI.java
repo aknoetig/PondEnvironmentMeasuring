@@ -25,11 +25,13 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import app.controller.ApplicationState;
 import app.controller.Controller;
+import app.controller.Data;
 
 // Graphical User Interface
 //
@@ -53,6 +55,12 @@ public class GUI extends JFrame implements ActionListener {
 	private JTextField portTextField;
 
 	private JTextArea textArea;
+	
+	private XYSeries series_temp_p;
+	private XYSeries series_temp_w;
+	private XYSeries series_light;
+	
+	//String[] results = controller.parseCSV();
 
 	// Constructor
 	public GUI() {
@@ -84,16 +92,10 @@ public class GUI extends JFrame implements ActionListener {
 	private void initialize_LightChart() {
 
 		// Create a simple XY chart
-		XYSeries series = new XYSeries("Light Graph");
-		String[] data = controller.parseCSV();
-		series.add(1, 1);
-		series.add(1, 2);
-		series.add(2, 1);
-		series.add(3, 9);
-		series.add(4, 10);
+		series_light = new XYSeries("Light Intensity");
 		// Add the series to your data set
 		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
+		dataset.addSeries(series_light);
 		// Generate the graph
 		JFreeChart chart = ChartFactory.createXYLineChart("XY Chart", // Title
 				"Time in Hours", // x-axis Label
@@ -104,6 +106,7 @@ public class GUI extends JFrame implements ActionListener {
 				true, // Use tooltips
 				false // Configure chart to generate URLs?
 				);
+		chart.setTitle("Light Plot");
 		
 		ChartPanel chartPanel = new ChartPanel(chart, false);
 		chartPanel.setPreferredSize(new Dimension(250, 250));
@@ -113,27 +116,31 @@ public class GUI extends JFrame implements ActionListener {
 
 	// Initialize the Chart
 	private void initialize_TempChart() {
-
+		
 		// Create a simple XY chart
-		XYSeries series = new XYSeries("Temperature Graph");
-		series.add(1, 1);
-		series.add(1, 2);
-		series.add(2, 1);
-		series.add(3, 9);
-		series.add(4, 10);
+		series_temp_p = new XYSeries("Pond Temp");
+		series_temp_w = new XYSeries("Weather Temp");
+		
 		// Add the series to your data set
-		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
+		XYSeriesCollection dataset_pond = new XYSeriesCollection();
+		XYSeriesCollection dataset_weather = new XYSeriesCollection();
+		dataset_pond.addSeries(series_temp_p);
+		dataset_weather.addSeries(series_temp_w);
 		// Generate the graph
 		JFreeChart chart = ChartFactory.createXYLineChart("XY Chart", // Title
 				"Time in Hours", // x-axis Label
 				"Temperature in Celsius", // y-axis Label
-				dataset, // Dataset
+				null, // Dataset Pond
 				PlotOrientation.VERTICAL, // Plot Orientation
 				true, // Show Legend
 				true, // Use tooltips
 				false // Configure chart to generate URLs?
 				);
+		
+		chart.setTitle("Temperature Plot");
+		XYPlot plot = (XYPlot) chart.getPlot();
+		plot.setDataset(0, dataset_pond);
+		plot.setDataset(1, dataset_weather);	
 		
 		ChartPanel chartPanel = new ChartPanel(chart, false);
 		chartPanel.setPreferredSize(new Dimension(250, 250));
@@ -251,13 +258,20 @@ public class GUI extends JFrame implements ActionListener {
 
 			// call Controller to connect
 			boolean result = controller.connect(ip, port);
-			controller.parseCSV();
+			System.out.println("connecting...");	
 			if (result) {
 				// Data has been read in, updating CSV View
 				JOptionPane.showMessageDialog(this, "Data has been read", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				textArea.setText(controller.getCSVData());
-				controller.parseCSV();
+				Data[] data = controller.parseCSV();
+				
+				for (Data d : data) {
+					series_temp_p.add(d.getHours(), d.getPond_temp());
+					series_temp_w.add(d.getHours(), d.getWeather_temp());
+					series_light.add(d.getHours(), d.getLight());
+				}
+				
 			} else {
 				// Connection Failed for some reason
 				JOptionPane.showMessageDialog(this, "Connection Failed", "",
